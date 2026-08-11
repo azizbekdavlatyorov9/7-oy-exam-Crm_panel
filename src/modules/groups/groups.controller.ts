@@ -25,7 +25,7 @@ import { AuthGuard } from "src/common/guards/auth.guard";
 
 
 @ApiTags("Groups")
-@ApiBearerAuth()
+@ApiBearerAuth(`JWT-auth`)
 @Controller("groups")
 export class GroupsController {
   constructor(

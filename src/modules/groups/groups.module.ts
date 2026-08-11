@@ -7,12 +7,16 @@ import { Teacher } from "../teachers/entities/teacher.entity";
 import { GroupsController } from "./groups.controller";
 import { GroupsService } from "./groups.service";
 
+import { AuthModule } from "../auth/auth.module";
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Group,
       Teacher,
     ]),
+
+    AuthModule,
   ],
 
   controllers: [

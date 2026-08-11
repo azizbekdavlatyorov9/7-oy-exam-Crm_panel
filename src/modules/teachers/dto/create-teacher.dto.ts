@@ -1,8 +1,6 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 import {
   IsEmail,
-  IsNotEmpty,
-  IsOptional,
   IsString,
   Length,
 } from "class-validator";
@@ -12,37 +10,30 @@ export class CreateTeacherDto {
     example: "Ali Valiyev",
   })
   @IsString()
-  @IsNotEmpty()
-  @Length(3, 100)
   full_name!: string;
 
   @ApiProperty({
     example: "+998901234567",
   })
   @IsString()
-  @IsNotEmpty()
-  @Length(9, 20)
   phone_number!: string;
 
   @ApiProperty({
     example: "Backend Developer",
   })
   @IsString()
-  @IsNotEmpty()
-  @Length(2, 100)
   profession!: string;
 
-  @ApiPropertyOptional({
+  @ApiProperty({
     example: "ali@gmail.com",
   })
-  @IsOptional()
   @IsEmail()
-  email?: string;
+  email!: string;
 
-  @ApiPropertyOptional({
-    example: "teacher.jpg",
+  @ApiProperty({
+    type: "string",
+    format: "binary",
+    required: false,
   })
-  @IsOptional()
-  @IsString()
-  picture?: string;
+  picture?: any;
 }

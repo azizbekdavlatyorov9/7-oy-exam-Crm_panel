@@ -3,8 +3,13 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import {
+  InjectRepository,
+} from "@nestjs/typeorm";
+
+import {
+  Repository,
+} from "typeorm";
 
 import { Teacher } from "./entities/teacher.entity";
 
@@ -18,37 +23,39 @@ export class TeachersService {
     private readonly teacherRepo: Repository<Teacher>,
   ) {}
 
-  // CREATE
+  // ================= CREATE =================
+
   async create(
     createTeacherDto: CreateTeacherDto,
+    file: Express.Multer.File,
   ) {
-    const teacher = this.teacherRepo.create(
-      createTeacherDto,
-    );
+    const teacher =
+      this.teacherRepo.create({
+        ...createTeacherDto,
+
+        picture: file
+          ? file.filename
+          : "",
+      });
 
     return await this.teacherRepo.save(
       teacher,
     );
   }
 
-  // FIND ALL
+  // ================= FIND ALL =================
+
   async findAll() {
-    return await this.teacherRepo.find({
-      relations: {
-        groups: true,
-      },
-    });
+    return await this.teacherRepo.find();
   }
 
-  // FIND ONE
+  // ================= FIND ONE =================
+
   async findOne(id: number) {
     const teacher =
       await this.teacherRepo.findOne({
         where: {
           id,
-        },
-        relations: {
-          groups: true,
         },
       });
 
@@ -61,48 +68,36 @@ export class TeachersService {
     return teacher;
   }
 
-  // UPDATE
+  // ================= UPDATE =================
+
   async update(
     id: number,
     updateTeacherDto: UpdateTeacherDto,
+    file: Express.Multer.File,
   ) {
     const teacher =
-      await this.teacherRepo.findOne({
-        where: {
-          id,
-        },
-      });
-
-    if (!teacher) {
-      throw new NotFoundException(
-        "Teacher not found",
-      );
-    }
+      await this.findOne(id);
 
     Object.assign(
       teacher,
       updateTeacherDto,
     );
 
+    if (file) {
+      teacher.picture =
+        file.filename;
+    }
+
     return await this.teacherRepo.save(
       teacher,
     );
   }
 
-  // DELETE
+  // ================= DELETE =================
+
   async remove(id: number) {
     const teacher =
-      await this.teacherRepo.findOne({
-        where: {
-          id,
-        },
-      });
-
-    if (!teacher) {
-      throw new NotFoundException(
-        "Teacher not found",
-      );
-    }
+      await this.findOne(id);
 
     await this.teacherRepo.softRemove(
       teacher,

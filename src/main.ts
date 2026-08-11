@@ -19,7 +19,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("CRM Panel")
     .setDescription("O'quvchilar uchun Crm panel")
-    .setVersion("1.0.0")
+    .setVersion("1.0.0") 
     .addBearerAuth(
       {
         type: "http",
